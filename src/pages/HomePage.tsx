@@ -1,4 +1,5 @@
 import { Container, Card, CardContent, CardActionArea, Typography, Box, Paper } from '@mui/material';
+import { Link } from 'react-router-dom';
 import CameraAltIcon from '@mui/icons-material/CameraAlt';
 import HomeIcon from '@mui/icons-material/Home';
 import CreateIcon from '@mui/icons-material/Create';
@@ -45,29 +46,34 @@ export const HomePage = () => {
             elevation={0}
             sx={{ bgcolor: 'transparent' }}
           >
-            <Card 
-              sx={{ 
-                height: '100%',
-                transition: 'transform 0.2s ease-in-out',
-                '&:hover': {
-                  transform: 'scale(1.02)'
-                }
-              }}
+            <Link 
+              to={exercise.path} 
+              style={{ textDecoration: 'none' }}
             >
-              <CardActionArea sx={{ height: '100%' }}>
-                <CardContent>
-                  <Box display="flex" alignItems="center" mb={2}>
-                    {exercise.icon}
-                    <Typography variant="h5" component="h2" ml={2}>
-                      {exercise.title}
+              <Card 
+                sx={{ 
+                  height: '100%',
+                  transition: 'transform 0.2s ease-in-out',
+                  '&:hover': {
+                    transform: 'scale(1.02)'
+                  }
+                }}
+              >
+                <CardActionArea sx={{ height: '100%' }}>
+                  <CardContent>
+                    <Box display="flex" alignItems="center" mb={2}>
+                      {exercise.icon}
+                      <Typography variant="h5" component="h2" ml={2}>
+                        {exercise.title}
+                      </Typography>
+                    </Box>
+                    <Typography variant="body1" color="text.secondary">
+                      {exercise.description}
                     </Typography>
-                  </Box>
-                  <Typography variant="body1" color="text.secondary">
-                    {exercise.description}
-                  </Typography>
-                </CardContent>
-              </CardActionArea>
-            </Card>
+                  </CardContent>
+                </CardActionArea>
+              </Card>
+            </Link>
           </Paper>
         ))}
       </div>

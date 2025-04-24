@@ -29,6 +29,7 @@
 - Use destructuring for props
 - Prefer composition over inheritance
 - Add .scss file along component for component specific styles. Use general scss for common / reusable styles
+- Do not hardcode styles on tsx. Add a generic class in /styles/*.scss or if specific to component add or create new Component.module.scss
 
 ### Typescript
 - Use TypeScript with strict type checking

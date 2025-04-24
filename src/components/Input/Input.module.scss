@@ -1,0 +1,17 @@
+@import '../../../styles/variables.scss';
+
+.input {
+  width: 100%;
+
+  :global(.MuiOutlinedInput-root) {
+    border-radius: $border-radius;
+
+    &.Mui-focused .MuiOutlinedInput-notchedOutline {
+      border-color: $primary-color;
+    }
+  }
+
+  :global(.MuiInputLabel-root.Mui-focused) {
+    color: $primary-color;
+  }
+}
