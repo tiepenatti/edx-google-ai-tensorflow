@@ -1,0 +1,17 @@
+@import './variables.scss';
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: linear-gradient(145deg, $background-gradient-start 0%, $background-gradient-end 100%);
+}
+
+.MuiCard-root {
+  backdrop-filter: blur($blur-amount);
+  background-color: rgba($white, $overlay-opacity) !important;
+  box-shadow: $card-shadow !important;
+}
+
+.MuiSvgIcon-root {
+  color: $primary-color;
+}

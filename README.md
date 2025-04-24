@@ -1,6 +1,60 @@
 # edX Google AI TensorFlow.js
 This is a simple project demonstrating the exercises learned from edX course by Google on tensorflow.js regarding AI and ML.
 
+## Technical Stack
+
+This project is built using modern web technologies:
+- **React 19** - UI library for building component-based interfaces
+- **TypeScript** - For type-safe JavaScript development
+- **SASS/SCSS** - For enhanced CSS styling with modules support
+- **Vite** - Next-generation frontend tooling for fast development and building
+- **Material-UI** - React component library implementing Google's Material Design
+- **TensorFlow.js** - Machine learning library for JavaScript
+- **Chart.js** - For data visualization
+
+## Getting Started
+
+### Prerequisites
+- Node.js (Latest LTS version recommended)
+- npm or yarn
+
+### Installation
+1. Clone the repository
+2. Install dependencies:
+```bash
+npm install
+```
+
+### Development
+To start the development server with hot-reload:
+```bash
+npm run dev
+```
+This will:
+- Start Vite dev server
+- Watch for TypeScript compilation
+- Compile SASS files automatically
+
+The application will be available at `http://localhost:5173`
+
+### Building for Production
+To create a production build:
+```bash
+npm run build
+```
+
+### Preview Production Build
+To preview the production build locally:
+```bash
+npm run preview
+```
+
+### Linting
+To run the linter:
+```bash
+npm run lint
+```
+
 ## Exercises
 
 ### **Smart Cam**
