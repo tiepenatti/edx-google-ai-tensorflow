@@ -4,8 +4,7 @@ import CameraAltIcon from '@mui/icons-material/CameraAlt';
 import HomeIcon from '@mui/icons-material/Home';
 import CreateIcon from '@mui/icons-material/Create';
 import CheckroomIcon from '@mui/icons-material/Checkroom';
-import { Header } from '../components/Header';
-import { Exercise } from '../types/exercise';
+import { Exercise } from '../types/Exercise';
 import './HomePage.scss';
 
 const exercises: Omit<Exercise, 'id' | 'difficulty'>[] = [
@@ -38,7 +37,6 @@ const exercises: Omit<Exercise, 'id' | 'difficulty'>[] = [
 export const HomePage = () => {
   return (
     <Container maxWidth="lg" sx={{ py: 4 }}>
-      <Header />
       <div className="home-page__grid">
         {exercises.map((exercise) => (
           <Paper 

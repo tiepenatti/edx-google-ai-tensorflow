@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.3.0] - 2025-04-28
+
+### Added
+- Implemented House Pricing exercise:
+  - Custom neural network model for real estate price prediction
+  - Interactive training interface with configurable parameters
+  - Real-time visualization of training progress
+  - Multi-feature prediction using house size and number of bedrooms
+  - Dynamic scatter plot showing training data and predictions
+  - Configurable training parameters (learning rate, optimizer, epochs, batch size)
+  - Model evaluation section with custom input testing
+
 ## [0.2.0] - 2025-04-24
 
 ### Added

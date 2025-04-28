@@ -58,6 +58,7 @@ npm run lint
 ## Exercises
 
 ### **Smart Cam**
+![Using pre-trained models to classify images](/src/assets/images/smartcam.png)
 - Using prebuilt NN model [COCO-SSD](https://github.com/tensorflow/tfjs-models/tree/master/coco-ssd) to recognize objects from camera in your browser.
 - Intro section describing the use of the camera and images for classification with note for privacy
 - Camera section: canvas with button to start camera that triggers asking for user permission
@@ -66,6 +67,7 @@ npm run lint
 - Button to cleanup, disposing model and data used
 
 ### **House Pricing**
+![Single neuron NN to test linear regression on synthetic Real State data](/src/assets/images/realstate.png)
 - Uses a custom built very simple NN model to train on synthetic real state pricing data (floor size, number of bedrooms and house price) provided by [Google]('https://storage.googleapis.com/jmstore/TensorFlowJS/EdX/TrainingData/real-estate-data.js') which represents a liner regression problem in which a single neuron is able to give an estimation.
 - Data is provided with real numbers and should be normalized before training.
 - Section 1: Info section: some basic info on how the page works
@@ -82,6 +84,7 @@ npm run lint
      - a button to trigger the model predict the house price given the inputs
      - a section to show the estimated house price
      - a button to clean up the model and memory
+
 
 ### **Handwritten Digit Recognition**
 - Uses a custom built NN model with only dense layers to train on a subset of the MNIST dataset provided by [Google]('https://storage.googleapis.com/jmstore/TensorFlowJS/EdX/TrainingData/mnist.js').

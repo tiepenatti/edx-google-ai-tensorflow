@@ -1,15 +1,33 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { Box } from '@mui/material';
 import { HomePage } from './pages/HomePage';
 import { SmartCam } from './pages/exercises/SmartCam/SmartCam';
+import HousePricing from './pages/exercises/HousePricing/HousePricing';
+import { Header } from './components/Header';
+import { Breadcrumbs } from './components/Breadcrumbs/Breadcrumbs';
 import './styles/global.scss';
 
 function App() {
   return (
     <Router>
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/smart-cam" element={<SmartCam />} />
-      </Routes>
+      <Box 
+        sx={{ 
+          minHeight: '100vh', 
+          display: 'flex', 
+          flexDirection: 'column',
+          background: 'linear-gradient(135deg, #f5f5f5 0%, #e0e0e0 100%)',
+        }}
+      >
+        <Header />
+        <Breadcrumbs />
+        <Box component="main" sx={{ flex: 1 }}>
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/smart-cam" element={<SmartCam />} />
+            <Route path="/house-pricing" element={<HousePricing />} />
+          </Routes>
+        </Box>
+      </Box>
     </Router>
   );
 }
