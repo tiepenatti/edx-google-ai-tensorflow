@@ -24,7 +24,7 @@ const exercises: Omit<Exercise, 'id' | 'difficulty'>[] = [
     title: "Handwritten Digit Recognition",
     description: "Train a neural network to recognize handwritten digits using MNIST dataset",
     icon: <CreateIcon fontSize="large" />,
-    path: "/digit-recognition"
+    path: "/handwritten-digit"
   },
   {
     title: "Fashion Image Recognition",

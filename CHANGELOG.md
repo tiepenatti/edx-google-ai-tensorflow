@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.4.0] - 2025-04-28
+
+### Added
+- Enhanced Handwritten Digit Recognition exercise:
+  - Improved UI with consistent layout using Material-UI Container and Cards
+  - Added error boundary for better error handling
+  - Full-width training visualization graph
+  - Modular SCSS styling with proper namespace usage
+  - Better component organization and error handling
+  - Interactive training section with configurable neural network architecture
+  - Real-time digit recognition with canvas drawing
+  - Dynamic model evaluation capabilities
+
 ## [0.3.0] - 2025-04-28
 
 ### Added

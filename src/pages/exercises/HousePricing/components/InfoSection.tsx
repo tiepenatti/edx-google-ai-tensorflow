@@ -1,4 +1,4 @@
-import { Paper, Typography, Box } from '@mui/material';
+import { Paper, Typography, Box, Link } from '@mui/material';
 
 export const InfoSection = () => {
   return (
@@ -7,7 +7,8 @@ export const InfoSection = () => {
         House Price Prediction
       </Typography>
       <Typography variant="body1" paragraph>
-        This exercise demonstrates a simple neural network that predicts house prices based on floor size and number of bedrooms.
+        This exercise demonstrates a simple neural network that predicts house prices based on floor size and number of bedrooms
+        provided by <Link href="https://storage.googleapis.com/jmstore/TensorFlowJS/EdX/TrainingData/real-estate-data.js">Google</Link> for the course.
         The model uses a single dense layer with one unit to perform linear regression.
       </Typography>
       <Box component="ul">

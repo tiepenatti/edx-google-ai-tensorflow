@@ -6,6 +6,7 @@ const navigationItems = [
   { path: '/', label: 'Home' },
   { path: '/smart-cam', label: 'Smart Cam' },
   { path: '/house-pricing', label: 'House Pricing' },
+  { path: '/handwritten-digit', label: 'Handwritten Digit' },
 ];
 
 export const Header = () => {

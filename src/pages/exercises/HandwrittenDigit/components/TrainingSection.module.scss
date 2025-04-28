@@ -1,0 +1,62 @@
+@use '../../../../styles/colors' as colors;
+@use '../../../../styles/spacing' as spacing;
+@use '../../../../styles/breakpoints' as breakpoints;
+@use "sass:map";
+
+.training-section {
+  padding: spacing.$spacing-lg;
+  margin-bottom: spacing.$spacing-lg;
+  background-color: colors.$background-paper;
+  width: 100%;
+
+  &__hidden-layers {
+    margin-bottom: spacing.$spacing-lg;
+  }
+
+  &__layer-inputs {
+    display: flex;
+    flex-direction: column;
+    gap: spacing.$spacing-md;
+    margin-bottom: spacing.$spacing-md;
+    width: 100%;
+  }
+
+  &__layer-controls {
+    display: flex;
+    gap: spacing.$spacing-md;
+  }
+
+  &__params-grid {
+    display: grid;
+    gap: spacing.$spacing-md;
+    margin-bottom: spacing.$spacing-lg;
+    grid-template-columns: 1fr;
+    width: 100%;
+
+    @media (min-width: map.get(breakpoints.$breakpoints, 'sm')) {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    @media (min-width: map.get(breakpoints.$breakpoints, 'md')) {
+      grid-template-columns: 1fr 1fr 1fr;
+    }
+  }
+
+  &__button-group {
+    display: flex;
+    gap: spacing.$spacing-md;
+    margin-bottom: spacing.$spacing-lg;
+  }
+
+  &__chart-container {
+    margin-top: spacing.$spacing-lg;
+    width: 100%;
+    height: 300px;
+    position: relative;
+
+    canvas {
+      width: 100% !important;
+      height: 270px !important;
+    }
+  }
+}

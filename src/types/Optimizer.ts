@@ -1,4 +1,5 @@
 export enum Optimizer {
   ADAM = 'adam',
-  SGD = 'sgd'
+  SGD = 'sgd',
+  RMS = 'rmsprop'
 }

@@ -3,6 +3,7 @@ import { Box } from '@mui/material';
 import { HomePage } from './pages/HomePage';
 import { SmartCam } from './pages/exercises/SmartCam/SmartCam';
 import HousePricing from './pages/exercises/HousePricing/HousePricing';
+import { HandwrittenDigit } from './pages/exercises/HandwrittenDigit/HandwrittenDigit';
 import { Header } from './components/Header';
 import { Breadcrumbs } from './components/Breadcrumbs/Breadcrumbs';
 import './styles/global.scss';
@@ -25,6 +26,7 @@ function App() {
             <Route path="/" element={<HomePage />} />
             <Route path="/smart-cam" element={<SmartCam />} />
             <Route path="/house-pricing" element={<HousePricing />} />
+            <Route path="/handwritten-digit" element={<HandwrittenDigit />} />
           </Routes>
         </Box>
       </Box>
