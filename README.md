@@ -87,6 +87,8 @@ npm run lint
 
 
 ### **Handwritten Digit Recognition**
+![Simple NN to test handwritten digit classification from MNIST dataset](/src/assets/images/digit.png)
+![Simple NN to test handwritten digit classification from MNIST dataset](/src/assets/images/digit2.png)
 - Uses a custom built NN model with only dense layers to train on a subset of the MNIST dataset provided by [Google]('https://storage.googleapis.com/jmstore/TensorFlowJS/EdX/TrainingData/mnist.js').
 - Data is provided with already normalized numbers (0-1), on a gray scale image of 28x28 pixels, having background as black, and handwritten digits as white or any shade of gray.
 - The model learns to recognize digits, but given the simplified structure and types of layers, it struggles to recognize unseen digits that are drawn tilted, scaled or panned on different areas of the grid.
@@ -111,9 +113,11 @@ npm run lint
 
 
 ### **Fashion Image Recognition**
-- Uses a custom built head NN model to predict on top of pre-trained Convolutional NN using a preprocessed fashion MNIST dataset provided by [Google]('https://storage.googleapis.com/jmstore/TensorFlowJS/EdX/TrainingData/mnist.js') to practice learning transfer
+![Simple CNN to test image classification from MNIST dataset](/src/assets/images/fashion.png)
+![Simple CNN to test image classification from MNIST dataset](/src/assets/images/fashion2.png)
+- Uses a custom built Convolutional 2D NN model to predict fashion items based on fashion MNIST dataset provided by [Google]('https://storage.googleapis.com/jmstore/TensorFlowJS/EdX/TrainingData/fashion-mnist.js')
 - Data is provided non-normalized numbers (0-255), on a gray scale image of 28x28 pixels, having background as black, and image in white or shades of gray.
-- The model uses a pre-trained CNN to recognize image features and gets trained into this subset of the fashion MNIST
+- The model uses a new CNN to recognize images and gets trained with this subset of the fashion MNIST
 - Info section: some basic info on how the page works
 - Training Section containing:
      - inputs for selecting training parameters (learning rate, optimizer function, loss function, validation split, batch  size and number of epochs for training)
@@ -124,11 +128,8 @@ npm run lint
      - a section with 1 graphs using chart.js: 
          * The training accuracy per epoch linear graph
 - Evaluation section with:
-     - a 280x280 pixels canvas with a grid every 10 pixels to represent the image being sent to the model for evaluation
+     - a drop zone for drag n drop image from web to predict using the trained model, with controls to position, scale and rotate the image
+     - a 280x280 pixels canvas with a grid every 10 pixels to represent the image being sent to the model for evaluation, with black as background and white as the image
      - a button to randomly pick an image from the training dataset to evaluate classification from model
-     - two buttons to increase/decrease the scaled of the image
-     - two buttons to increase/decrease the rotation of the image
-     - two buttons to change the x and y position of the image
-     - a button to randomly add noise
      - a section to show the estimated digit with it's probability, and the second contender with its probability
      - a button to clean up the model and memory

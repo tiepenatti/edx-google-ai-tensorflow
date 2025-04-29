@@ -305,6 +305,7 @@ export const EvaluationSection: FC<EvaluationSectionProps> = ({
         <Button
           variant="outlined"
           onClick={cleanupModel}
+          disabled={!model}
         >
           Cleanup Model
         </Button>

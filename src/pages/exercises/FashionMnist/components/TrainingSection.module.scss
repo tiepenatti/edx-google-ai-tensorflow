@@ -1,0 +1,40 @@
+@use '../../../../styles/spacing' as spacing;
+@use '../../../../styles/breakpoints' as breakpoints;
+@use "sass:map";
+
+.training-section {
+  &__architecture {
+    margin-bottom: spacing.$spacing-lg;
+  }
+
+  &__layer-buttons {
+    display: flex;
+    gap: spacing.$spacing-md;
+  }
+
+  &__parameters {
+    margin-bottom: spacing.$spacing-lg;
+  }
+
+  &__button-group {
+    display: flex;
+    gap: spacing.$spacing-md;
+    margin-bottom: spacing.$spacing-lg;
+  }
+
+  &__chart {
+    &-container {
+      height: 300px;
+    }
+  }
+
+  &__params-grid {
+    display: grid;
+    gap: spacing.$spacing-md;
+    grid-template-columns: repeat(3, 1fr);
+
+    @media (max-width: map.get(breakpoints.$breakpoints, 'sm')) {
+      grid-template-columns: 1fr;
+    }
+  }
+}

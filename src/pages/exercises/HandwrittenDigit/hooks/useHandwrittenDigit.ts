@@ -96,11 +96,12 @@ export const useHandwrittenDigit = () => {
       });
 
       await newModel.fit(INPUTS_TENSOR, OUTPUTS_TENSOR, {
+        shuffle: true,
         batchSize: trainingParams.batchSize,
         validationSplit: trainingParams.validationSplit,
         epochs: trainingParams.epochs,
         callbacks: {
-          onEpochEnd: (epoch, logs) => {
+          onEpochEnd: async (epoch, logs) => {
             if (logs) {
               const accuracy = logs.acc ?? 0;
               const loss = logs.loss ?? 0;
@@ -115,6 +116,7 @@ export const useHandwrittenDigit = () => {
                 validationLoss: valLoss
               }]);
             }
+            await tf.nextFrame();
           }
         }
       });

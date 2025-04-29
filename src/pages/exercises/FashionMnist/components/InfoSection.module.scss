@@ -1,0 +1,9 @@
+@use '../../../../styles/spacing' as spacing;
+
+.info-section {
+  &__text {
+    & > p {
+      margin-bottom: spacing.$spacing-md;
+    }
+  }
+}

@@ -4,6 +4,7 @@ import { HomePage } from './pages/HomePage';
 import { SmartCam } from './pages/exercises/SmartCam/SmartCam';
 import HousePricing from './pages/exercises/HousePricing/HousePricing';
 import { HandwrittenDigit } from './pages/exercises/HandwrittenDigit/HandwrittenDigit';
+import { FashionMnist } from './pages/exercises/FashionMnist/FashionMnist';
 import { Header } from './components/Header';
 import { Breadcrumbs } from './components/Breadcrumbs/Breadcrumbs';
 import './styles/global.scss';
@@ -27,6 +28,7 @@ function App() {
             <Route path="/smart-cam" element={<SmartCam />} />
             <Route path="/house-pricing" element={<HousePricing />} />
             <Route path="/handwritten-digit" element={<HandwrittenDigit />} />
+            <Route path="/fashion-recognition" element={<FashionMnist />} />
           </Routes>
         </Box>
       </Box>

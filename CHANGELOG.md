@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.5.0] - 2025-04-29
+
+### Added
+- Enhanced Fashion MNIST exercise with Convolutional Neural Network:
+  - Implemented CNN architecture with Conv2D and MaxPooling2D layers
+  - Added drag-and-drop image URL support with image transformations
+  - Real-time 28x28 grayscale preview of model input
+  - Interactive image controls (scale, rotation)
+  - Side-by-side visualization of original and processed images
+  - Improved model accuracy using convolutional layers
+  - Support for validation metrics during training
+  - Top-2 prediction display with confidence scores
+
 ## [0.4.0] - 2025-04-28
 
 ### Added
