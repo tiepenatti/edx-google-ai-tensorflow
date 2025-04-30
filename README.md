@@ -1,5 +1,55 @@
 # edX Google AI TensorFlow.js
-This is a simple project demonstrating the exercises learned from edX course by Google on tensorflow.js regarding AI and ML.
+This is a simple project demonstrating machine learning exercises from the edX course by Google on TensorFlow.js.
+
+## Exercises
+
+### 1. Smart Cam - Pre-trained models
+![Using pre-trained models to classify images](/src/assets/images/smartcam.png)
+
+Real-time object detection using your browser's camera. Uses the pre-trained [COCO-SSD model](https://github.com/tensorflow/tfjs-models/tree/master/coco-ssd) to identify objects in the video feed.
+
+**Key Features:**
+- Live camera feed with real-time object detection
+- Privacy-focused (all processing happens locally)
+- On/off toggle for object detection
+- Clear visual boxes around detected objects with labels and confidence scores
+
+### 2. House Price Predictor - Single-neuron model
+![Single neuron NN to test linear regression on synthetic Real State data](/src/assets/images/realstate.png)
+
+A simple neural network that predicts house prices based on floor size and number of bedrooms using synthetic real estate [data](https://storage.googleapis.com/jmstore/TensorFlowJS/EdX/TrainingData/real-estate-data.js) from Google course.
+
+**Key Features:**
+- Single-neuron model demonstrating linear regression
+- Interactive training configuration (learning rate, optimizer, etc.)
+- Visual training progress with accuracy graphs
+- Real-time price predictions based on user input
+
+### 3. Digit Recognition - Deep learning / multi-layer model
+![Simple NN to test handwritten digit classification from MNIST dataset](/src/assets/images/digit.png)
+![Simple NN to test handwritten digit classification from MNIST dataset](/src/assets/images/digit2.png)
+
+A neural network that recognizes hand-drawn digits using the [MNIST dataset](https://storage.googleapis.com/jmstore/TensorFlowJS/EdX/TrainingData/mnist.js) from Google course. Draw digits directly in your browser and see the model predict them in real-time.
+
+**Key Features:**
+- Draw digits using your mouse
+- Customizable neural network architecture
+- Live prediction with confidence scores
+- Test with random samples from the training dataset
+- Interactive drawing tools (adjustable brush size)
+
+### 4. Fashion Item Classifier - Convolutional Neural Network
+![Simple CNN to test image classification from MNIST dataset](/src/assets/images/fashion.png)
+![Simple CNN to test image classification from MNIST dataset](/src/assets/images/fashion2.png)
+
+A Convolutional Neural Network (CNN) that identifies clothing items from images using the [Fashion MNIST dataset](https://storage.googleapis.com/jmstore/TensorFlowJS/EdX/TrainingData/fashion-mnist.js) from Google course.
+
+**Key Features:**
+- Drag-and-drop interface for testing your own images
+- Image transformation controls (position, scale, rotation)
+- Customizable CNN architecture
+- Training progress visualization
+- Top predictions with confidence scores
 
 ## Technical Stack
 
@@ -54,82 +104,3 @@ To run the linter:
 ```bash
 npm run lint
 ```
-
-## Exercises
-
-### **Smart Cam**
-![Using pre-trained models to classify images](/src/assets/images/smartcam.png)
-- Using prebuilt NN model [COCO-SSD](https://github.com/tensorflow/tfjs-models/tree/master/coco-ssd) to recognize objects from camera in your browser.
-- Intro section describing the use of the camera and images for classification with note for privacy
-- Camera section: canvas with button to start camera that triggers asking for user permission
-- Once camera is enabled, the model is loaded and starts to draw overlay boxes of found objects with it's name and probability
-- Switch to turn on and off the classification of images
-- Button to cleanup, disposing model and data used
-
-### **House Pricing**
-![Single neuron NN to test linear regression on synthetic Real State data](/src/assets/images/realstate.png)
-- Uses a custom built very simple NN model to train on synthetic real state pricing data (floor size, number of bedrooms and house price) provided by [Google]('https://storage.googleapis.com/jmstore/TensorFlowJS/EdX/TrainingData/real-estate-data.js') which represents a liner regression problem in which a single neuron is able to give an estimation.
-- Data is provided with real numbers and should be normalized before training.
-- Section 1: Info section: some basic info on how the page works
-- Section 2: Training Section containing:
-     - inputs for selecting training parameters (learning rate, optimizer function, loss function, validation split, batch size and number of epochs for training)
-     - a button to start training
-     - a button to stop training (enable if training is in progress)
-     - a button to show details on the model using the tf.vis side panel
-     - a section with 2 graphs using chart.js: 
-         * The training accuracy per epoch linear graph
-         * The scattered plot of the floor size vs price, colored by no of bedrooms
-- Section 3: Evaluation section containing:
-     - inputs for floor size and number of bedrooms
-     - a button to trigger the model predict the house price given the inputs
-     - a section to show the estimated house price
-     - a button to clean up the model and memory
-
-
-### **Handwritten Digit Recognition**
-![Simple NN to test handwritten digit classification from MNIST dataset](/src/assets/images/digit.png)
-![Simple NN to test handwritten digit classification from MNIST dataset](/src/assets/images/digit2.png)
-- Uses a custom built NN model with only dense layers to train on a subset of the MNIST dataset provided by [Google]('https://storage.googleapis.com/jmstore/TensorFlowJS/EdX/TrainingData/mnist.js').
-- Data is provided with already normalized numbers (0-1), on a gray scale image of 28x28 pixels, having background as black, and handwritten digits as white or any shade of gray.
-- The model learns to recognize digits, but given the simplified structure and types of layers, it struggles to recognize unseen digits that are drawn tilted, scaled or panned on different areas of the grid.
-- Info section: some basic info on how the page works
-- Training Section containing:
-     - inputs for selecting training parameters (learning rate, optimizer function, loss function, validation split, batch  size and number of epochs for training)
-     - a section to customize the internal layers architecture with 2 buttons to add/remove new hidden layers, and an input for each added layer with the number of units in each layer.
-     - a button to start training
-     - a button to stop training (enable if training is in progress)
-     - a button to show details on the model using the tf.vis side panel
-     - a section with 1 graphs using chart.js: 
-         * The training accuracy per epoch linear graph
-- Evaluation section with 2 canvas side by side:
-     - a 280x280 pixels canvas to hand-draw a digit with the mouse
-         - a button to clear the canvas
-         - a button to trigger the model predict the drawn digit
-         - two buttons to increase/decrease the mouse trace width
-     - a 280x280 pixels canvas with a grid every 10 pixels to represent the image being sent to the model for evaluation
-         - a button to randomly pick an image from the training dataset to evaluate classification from model
-     - a section to show the estimated digit with it's probability, and the second contender with its probability
-     - a button to clean up the model and memory
-
-
-### **Fashion Image Recognition**
-![Simple CNN to test image classification from MNIST dataset](/src/assets/images/fashion.png)
-![Simple CNN to test image classification from MNIST dataset](/src/assets/images/fashion2.png)
-- Uses a custom built Convolutional 2D NN model to predict fashion items based on fashion MNIST dataset provided by [Google]('https://storage.googleapis.com/jmstore/TensorFlowJS/EdX/TrainingData/fashion-mnist.js')
-- Data is provided non-normalized numbers (0-255), on a gray scale image of 28x28 pixels, having background as black, and image in white or shades of gray.
-- The model uses a new CNN to recognize images and gets trained with this subset of the fashion MNIST
-- Info section: some basic info on how the page works
-- Training Section containing:
-     - inputs for selecting training parameters (learning rate, optimizer function, loss function, validation split, batch  size and number of epochs for training)
-     - a section to customize the internal layers architecture with 2 buttons to add/remove new hidden layers, and an input for each added layer with the number of units in each layer.
-     - a button to start training
-     - a button to stop training (enable if training is in progress)
-     - a button to show details on the model using the tf.vis side panel
-     - a section with 1 graphs using chart.js: 
-         * The training accuracy per epoch linear graph
-- Evaluation section with:
-     - a drop zone for drag n drop image from web to predict using the trained model, with controls to position, scale and rotate the image
-     - a 280x280 pixels canvas with a grid every 10 pixels to represent the image being sent to the model for evaluation, with black as background and white as the image
-     - a button to randomly pick an image from the training dataset to evaluate classification from model
-     - a section to show the estimated digit with it's probability, and the second contender with its probability
-     - a button to clean up the model and memory
