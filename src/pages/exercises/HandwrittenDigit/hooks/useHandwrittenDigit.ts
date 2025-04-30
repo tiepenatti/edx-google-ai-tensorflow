@@ -66,6 +66,7 @@ export const useHandwrittenDigit = () => {
     }
     
     const newModel = createModel();
+    setModel(newModel);
     
     try {
       const INPUTS = TRAINING_DATA.inputs as number[][];
@@ -121,7 +122,6 @@ export const useHandwrittenDigit = () => {
         }
       });
 
-      setModel(newModel);
       INPUTS_TENSOR.dispose();
       OUTPUTS_TENSOR.dispose();
 
