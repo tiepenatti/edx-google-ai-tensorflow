@@ -7,6 +7,7 @@ const navigationItems = [
   { path: '/smart-cam', label: 'Smart Cam' },
   { path: '/house-pricing', label: 'House Pricing' },
   { path: '/handwritten-digit', label: 'Handwritten Digit' },
+  { path: '/fashion-mnist', label: 'Fashion Recognition' },
 ];
 
 export const Header = () => {

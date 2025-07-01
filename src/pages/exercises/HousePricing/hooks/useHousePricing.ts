@@ -59,31 +59,56 @@ export const useHousePricing = () => {
     return model;
   }, []);
 
+  useEffect(() => {
+    return () => {
+      if (model) {
+        model.dispose();
+      }
+      disposeNormalizationRefIfExist();
+      tf.engine().disposeVariables();
+    };
+  }, []);
+
   const startTraining = useCallback(async () => {
+    let newModel: tf.LayersModel | null = null;
     try {
       setIsTraining(true);
       setTrainingHistory([]);
       
-      // Clean up any existing model before creating a new one
+      // Clean up any existing model and normalization params
       if (model) {
         model.dispose();
       }
-
-      const newModel = createModel();
-      setModel(newModel);
-
       disposeNormalizationRefIfExist();
 
-      const inputs = TRAINING_DATA.inputs;
-      const outputs = TRAINING_DATA.outputs;
-      tf.util.shuffleCombo(inputs, outputs);
-      const { NORMALIZED_VALUES: normalizedInput, MIN_VALUES: inputMin, MAX_VALUES: inputMax } = 
-        normalizeTensor(tf.tensor2d(inputs), null, null);
-      normalizationRef.current = { min: inputMin, max: inputMax };
-      
-      const outputTensor = tf.tensor1d(outputs);
+      newModel = createModel();
+      setModel(newModel);
 
-      await newModel.fit(normalizedInput, outputTensor, {
+      // Wrap tensor operations in tf.tidy
+      const trainingResult = await tf.tidy(() => {
+        const inputs = TRAINING_DATA.inputs;
+        const outputs = TRAINING_DATA.outputs;
+        tf.util.shuffleCombo(inputs, outputs);
+
+        const inputTensor = tf.tensor2d(inputs);
+        const { NORMALIZED_VALUES: normalizedInput, MIN_VALUES: inputMin, MAX_VALUES: inputMax } = 
+          normalizeTensor(inputTensor, null, null);
+        
+        const outputTensor = tf.tensor1d(outputs);
+        
+        // Store normalization params for prediction
+        normalizationRef.current = { 
+          min: inputMin.clone(), 
+          max: inputMax.clone() 
+        };
+
+        return {
+          normalizedInput,
+          outputTensor
+        };
+      });
+
+      await newModel.fit(trainingResult.normalizedInput, trainingResult.outputTensor, {
         batchSize: trainingParamsRef.current.batchSize,
         epochs: trainingParamsRef.current.epochs,
         validationSplit: trainingParamsRef.current.validationSplit,
@@ -93,11 +118,13 @@ export const useHousePricing = () => {
             const sqrtLoss = Math.sqrt(logs?.loss || 0);
             const sqrtValLoss = Math.sqrt(logs?.val_loss || 0);
             
-            setTrainingHistory(prev => [...prev, <TrainingHistoryPoint>{
+            setTrainingHistory(prev => [...prev, {
               epoch,
+              accuracy: null,
               loss: sqrtLoss,
+              validationAccuracy: null,
               validationLoss: sqrtValLoss
-            }]);
+            } as TrainingHistoryPoint]);
           }
         }
       });
@@ -106,8 +133,12 @@ export const useHousePricing = () => {
     } catch (error) {
       console.error('Training error:', error);
       setModelStatus('error');
+      if (newModel) {
+        newModel.dispose();
+      }
     } finally {
       setIsTraining(false);
+      tf.engine().disposeVariables();
     }
   }, [model, createModel]);
 
@@ -125,12 +156,12 @@ export const useHousePricing = () => {
     return tf.tidy(() => {
       const input = tf.tensor2d([[size, bedrooms]]);
       const { NORMALIZED_VALUES: normalizedInput } = normalizeTensor(
-        input, 
-        normalizationRef.current!.min, 
+        input,
+        normalizationRef.current!.min,
         normalizationRef.current!.max
       );
       
-      const prediction = model!.predict(normalizedInput) as tf.Tensor;
+      const prediction = model.predict(normalizedInput) as tf.Tensor;
       return prediction.dataSync()[0];
     });
   }, [model]);
@@ -140,11 +171,8 @@ export const useHousePricing = () => {
       model.dispose();
       setModel(null);
     }
-    if (normalizationRef.current) {
-      normalizationRef.current.min.dispose();
-      normalizationRef.current.max.dispose();
-      normalizationRef.current = null;
-    }
+    disposeNormalizationRefIfExist();
+    tf.engine().disposeVariables();
     setModelStatus('loading');
     setTrainingHistory([]);
   }, [model]);

@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef } from 'react';
+import { useState, useCallback, useRef, useEffect } from 'react';
 import * as tf from '@tensorflow/tfjs';
 import * as tfvis from '@tensorflow/tfjs-vis';
 import { TRAINING_DATA, FASHION_LABELS } from '../../../../data/fashion-mnist';
@@ -88,6 +88,15 @@ export const useFashionMnist = () => {
     return model;
   }, [hiddenLayers]);
 
+  useEffect(() => {
+    return () => {
+      if (model) {
+        model.dispose();
+      }
+      tf.engine().disposeVariables();
+    };
+  }, []);
+
   const startTraining = useCallback(async () => {
     setIsTraining(true);
     setTrainingHistory([]);
@@ -100,14 +109,22 @@ export const useFashionMnist = () => {
     const newModel = createModel();
     
     try {
-      const inputs = TRAINING_DATA.inputs as number[][];
-      const outputs = TRAINING_DATA.outputs as number[];
-      tf.util.shuffleCombo(inputs, outputs);
+      // Wrap tensor operations in tf.tidy with proper typing
+      const trainingResult = await tf.tidy(() => {
+        const inputs = TRAINING_DATA.inputs as number[][];
+        const outputs = TRAINING_DATA.outputs as number[];
+        tf.util.shuffleCombo(inputs, outputs);
 
-      const inputsTensor = tf.div(inputs, 255);
-      const outputsTensor = tf.oneHot(tf.tensor1d(outputs, 'int32'), 10);
-      const reshapedInputs = inputsTensor.reshape([inputs.length, 28, 28, 1]);
-      
+        const inputsTensor = tf.div(tf.tensor2d(inputs), 255);
+        const outputsTensor = tf.oneHot(tf.tensor1d(outputs, 'int32'), 10);
+        const reshapedInputs = inputsTensor.reshape([inputs.length, 28, 28, 1]);
+        
+        return {
+          inputsTensor: reshapedInputs,
+          outputsTensor
+        };
+      });
+
       let optimizer: tf.Optimizer;
       switch (trainingParams.optimizer) {
         case Optimizer.ADAM:
@@ -130,7 +147,7 @@ export const useFashionMnist = () => {
 
       console.log('Training started, this might take a long time...');
 
-      await newModel.fit(reshapedInputs, outputsTensor, {
+      await newModel.fit(trainingResult.inputsTensor, trainingResult.outputsTensor, {
         shuffle: true,
         batchSize: trainingParams.batchSize,
         validationSplit: trainingParams.validationSplit,
@@ -160,31 +177,39 @@ export const useFashionMnist = () => {
       });
 
       setModel(newModel);
-      tf.dispose([reshapedInputs, outputsTensor, inputsTensor]);
 
     } catch (error) {
       console.error('Training failed:', error);
+      if (newModel) {
+        newModel.dispose();
+      }
     } finally {
       setIsTraining(false);
+      tf.engine().disposeVariables();
     }
   }, [trainingParams, model, createModel]);
+
+  const showModelSummary = useCallback(() => {
+    if (model) {
+      tfvis.show.modelSummary({ name: 'Model Summary' }, model);
+    }
+  }, [model]);
 
   const stopTraining = useCallback(() => {
     console.log('Stopping training...');
     stopTrainingRef.current = true;
-  }, [model]);
+  }, []);
 
   const predictImage = useCallback(async (imageData: ImageData) => {
     if (!model) {
       return null;
     }
 
-    try {
+    return tf.tidy(() => {
       const imageTensor = tf.browser.fromPixels(imageData, 1)
         .expandDims(0) as tf.Tensor4D;
       
-      let transformed = imageTensor;
-      transformed = tf.image.resizeBilinear(transformed, [28, 28]);
+      let transformed = tf.image.resizeBilinear(imageTensor, [28, 28]);
       
       if (imageTransform.rotation !== 0) {
         transformed = tf.image.rotateWithOffset(
@@ -197,37 +222,25 @@ export const useFashionMnist = () => {
       const normalized = transformed.div(255);
       const flattened = normalized.reshape([1, 28, 28, 1]);
       
-      const prediction = await model.predict(flattened) as tf.Tensor;
-      const probabilities = await prediction.data();
+      const prediction = model.predict(flattened) as tf.Tensor;
+      const probabilities = prediction.dataSync();
       
-      const sortedProbs = Array.from(probabilities)
+      return Array.from(probabilities)
         .map((prob, index) => ({ 
           label: FASHION_LABELS[index],
           probability: prob 
         }))
         .sort((a, b) => b.probability - a.probability)
         .slice(0, 2);
-
-      tf.dispose([imageTensor, transformed, normalized, flattened, prediction]);
-
-      return sortedProbs;
-    } catch (error) {
-      console.error('Prediction failed:', error);
-      return null;
-    }
+    });
   }, [model, imageTransform]);
-
-  const showModelSummary = useCallback(() => {
-    if (model) {
-      tfvis.show.modelSummary({ name: 'Model Summary' }, model);
-    }
-  }, [model]);
 
   const cleanupModel = useCallback(() => {
     if (model) {
       model.dispose();
       setModel(null);
     }
+    tf.engine().disposeVariables();
     setTrainingHistory([]);
   }, [model]);
 

@@ -32,24 +32,13 @@ export const useObjectDetection = ({
     try {
       await tf.ready();
       await tf.setBackend('webgl');
+      // Clear any existing memory before initialization
+      tf.engine().disposeVariables();
       setIsInitialized(true);
     } catch (error) {
       console.error('Error initializing TensorFlow:', error);
     }
   }, []);
-
-  const loadModel = useCallback(async () => {
-    if (!isMountedRef.current || !isInitialized) return;
-    try {
-      const loadedModel = await cocoSsd.load();
-      if (isMountedRef.current) {
-        setModel(loadedModel);
-        setIsModelLoaded(true);
-      }
-    } catch (error) {
-      console.error('Error loading COCO-SSD model:', error);
-    }
-  }, [isInitialized]);
 
   const drawPredictions = useCallback(async () => {
     // Early return if not ready, enabled, or unmounted
@@ -73,50 +62,48 @@ export const useObjectDetection = ({
         canvasRef.current.height = videoRef.current.videoHeight;
       }
 
-      // Run detection in a tensor scope
-      let predictions: cocoSsd.DetectedObject[] = [];
+      // Start a new tensor scope for each detection cycle
       await tf.engine().startScope();
       try {
-        predictions = await model.detect(videoRef.current);
+        const predictions = await model.detect(videoRef.current);
+        
+        // Early return if component unmounted during detection
+        if (!isMountedRef.current || !canvasRef.current) return;
+        
+        const ctx = canvasRef.current.getContext('2d');
+        if (!ctx) return;
+
+        // Clear previous drawings
+        ctx.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
+
+        // Draw new predictions
+        predictions.forEach(prediction => {
+          const [x, y, width, height] = prediction.bbox;
+          
+          ctx.strokeStyle = '#00ff00';
+          ctx.lineWidth = 2;
+          ctx.strokeRect(x, y, width, height);
+          
+          ctx.fillStyle = '#00ff00';
+          ctx.font = '16px Arial';
+          ctx.fillText(
+            `${prediction.class} ${Math.round(prediction.score * 100)}%`,
+            x,
+            y > 10 ? y - 5 : 10
+          );
+        });
+
+        // Schedule next detection if still enabled
+        if (isMountedRef.current && enabled) {
+          timeoutIdRef.current = setTimeout(drawPredictions, DETECTION_INTERVAL);
+        }
       } finally {
+        // Always end the scope to prevent memory leaks
         tf.engine().endScope();
-      }
-
-      // Early return if component unmounted during detection
-      if (!isMountedRef.current || !canvasRef.current) return;
-      
-      const ctx = canvasRef.current.getContext('2d');
-      if (!ctx) return;
-
-      ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-
-      // Draw predictions
-      predictions.forEach((prediction: cocoSsd.DetectedObject) => {
-        const [x, y, width, height] = prediction.bbox;
-
-        // Draw bounding box
-        ctx.strokeStyle = '#00ff00';
-        ctx.lineWidth = 2;
-        ctx.strokeRect(x, y, width, height);
-
-        // Draw background for text
-        ctx.fillStyle = 'rgba(0, 255, 0, 0.3)';
-        const text = `${prediction.class} ${Math.round(prediction.score * 100)}%`;
-        const textWidth = ctx.measureText(text).width;
-        ctx.fillRect(x, y - 20, textWidth + 10, 20);
-
-        // Draw text
-        ctx.fillStyle = '#000000';
-        ctx.font = '16px Arial';
-        ctx.fillText(text, x + 5, y - 5);
-      });
-
-      // Schedule next frame if still mounted and enabled
-      if (isMountedRef.current && enabled) {
-        timeoutIdRef.current = setTimeout(drawPredictions, DETECTION_INTERVAL);
       }
     } catch (error) {
       console.error('Error during detection:', error);
+      // Clean up any hanging tensors in case of error
       if (tf.engine().isTapeOn()) {
         tf.engine().endScope();
       }
@@ -133,6 +120,8 @@ export const useObjectDetection = ({
       return;
     }
     clearTimeoutSafely();
+    // Clear any lingering tensors before starting new detection cycle
+    tf.engine().disposeVariables();
     drawPredictions();
   }, [isModelLoaded, drawPredictions, isInitialized]);
 
@@ -148,9 +137,6 @@ export const useObjectDetection = ({
     }
 
     // Clean up tensors
-    if (tf.engine().isTapeOn()) {
-      tf.engine().endScope();
-    }
     tf.engine().disposeVariables();
   }, [canvasRef]);
 
@@ -162,9 +148,20 @@ export const useObjectDetection = ({
   // Load model after initialization
   useEffect(() => {
     if (isInitialized) {
+      const loadModel = async () => {
+        try {
+          const loadedModel = await cocoSsd.load();
+          if (isMountedRef.current) {
+            setModel(loadedModel);
+            setIsModelLoaded(true);
+          }
+        } catch (error) {
+          console.error('Error loading COCO-SSD model:', error);
+        }
+      };
       loadModel();
     }
-  }, [isInitialized, loadModel]);
+  }, [isInitialized]);
 
   // Handle enabled/disabled state changes
   useEffect(() => {
@@ -182,8 +179,10 @@ export const useObjectDetection = ({
     return () => {
       isMountedRef.current = false;
       stopDetection();
+      // Final cleanup of any remaining tensors
+      tf.engine().disposeVariables();
     };
-  }, []);
+  }, [stopDetection]);
 
   return {
     isModelLoaded: isModelLoaded && isInitialized,
