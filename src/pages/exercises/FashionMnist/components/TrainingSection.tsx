@@ -8,6 +8,8 @@ import { LossFunction } from '../../../../types/LossFunction';
 import { Optimizer } from '../../../../types/Optimizer';
 import { TrainingHistoryPoint } from '../../../../types/TrainingHistoryPoint';
 import styles from './TrainingSection.module.scss';
+import AddIcon from '@mui/icons-material/Add';
+import RemoveIcon from '@mui/icons-material/Remove';
 
 interface TrainingSectionProps {
   model: LayersModel | null;
@@ -96,12 +98,23 @@ export const TrainingSection: React.FC<TrainingSectionProps> = ({
               type="number"
               value={layer.units}
               onChange={e => updateHiddenLayer(index, parseInt(e.target.value, 10))}
-              inputProps={{ min: 1 }}
+              slotProps={{ htmlInput: { min: 1 } }}
             />
           ))}
           <Box className={styles['training-section__layer-buttons']}>
-            <Button onClick={addHiddenLayer}>Add Layer</Button>
-            <Button onClick={removeHiddenLayer} disabled={hiddenLayers.length <= 1}>Remove Layer</Button>
+            <Button 
+              variant="outlined" 
+              startIcon={<AddIcon />}
+              onClick={addHiddenLayer}
+            >
+              Add Layer</Button>
+            <Button 
+              variant="outlined" 
+              startIcon={<RemoveIcon />}
+              onClick={removeHiddenLayer} 
+              disabled={hiddenLayers.length <= 1}
+            >
+              Remove Layer</Button>
           </Box>
         </Stack>
       </Box>
@@ -118,7 +131,7 @@ export const TrainingSection: React.FC<TrainingSectionProps> = ({
               type="number"
               value={trainingParams.learningRate}
               onChange={e => setTrainingParams({ ...trainingParams, learningRate: parseFloat(e.target.value) })}
-              inputProps={{ step: 0.001, min: 0 }}
+              slotProps={{ htmlInput: { step: 0.001, min: 0 } }}
             />
           </Grid>
           <Grid size={{ xs: 12, sm: 6 }}>
@@ -186,10 +199,11 @@ export const TrainingSection: React.FC<TrainingSectionProps> = ({
         <Button onClick={startTraining} disabled={isTraining}>
           Start Training
         </Button>
-        <Button onClick={stopTraining} disabled={!isTraining}>
+        <Button onClick={stopTraining} disabled={!isTraining} variant="outlined" color="secondary">
           Stop Training
         </Button>
-        <Button onClick={showModelSummary} disabled={!model}>Show Model Details</Button>
+        <Button onClick={showModelSummary} disabled={!model} variant="outlined" >
+          Show Model Details</Button>
       </Box>
 
       {trainingHistory.length > 0 && (
@@ -203,6 +217,7 @@ export const TrainingSection: React.FC<TrainingSectionProps> = ({
               options={{
                 responsive: true,
                 maintainAspectRatio: false,
+                animation: false,
                 scales: {
                   y: {
                     type: 'linear',
