@@ -256,7 +256,12 @@ export const EvaluationSection: React.FC<EvaluationSectionProps> = ({
               <Button onClick={handleEvaluate} disabled={!imageUrl}>
                 Predict Image
               </Button>
-              <Button onClick={onCleanup}>
+              <Button
+                variant="outlined"
+                color="secondary" 
+                onClick={onCleanup}
+                disabled={!model}
+              >
                 Cleanup Model
               </Button>
             </Box>
