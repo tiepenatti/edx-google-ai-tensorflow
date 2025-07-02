@@ -98,10 +98,10 @@ export const TrainingSection: FC<TrainingSectionProps> = ({
     },
     plugins: {
       title: {
-        display: false  // Removed title since we have it in Typography
+        display: false
       },
       legend: {
-        position: 'top' as const  // Moved to top to save vertical space
+        position: 'top' as const
       }
     },
   };
@@ -126,9 +126,7 @@ export const TrainingSection: FC<TrainingSectionProps> = ({
                 value={layer.units}
                 onChange={(e) => updateHiddenLayer(index, parseInt(e.target.value))}
                 slotProps={{
-                  input: {
-                    inputProps: { min: 1 }
-                  }
+                  htmlInput: { min: 1 }
                 }}
               />
             </Box>
@@ -168,9 +166,7 @@ export const TrainingSection: FC<TrainingSectionProps> = ({
             learningRate: parseFloat(e.target.value)
           })}
           slotProps={{
-            input: {
-              inputProps: { step: 0.001, min: 0.001, max: 1 }
-            }
+            htmlInput: { step: 0.001, min: 0.001, max: 1 }
           }}
         />
         <TextField
@@ -183,9 +179,7 @@ export const TrainingSection: FC<TrainingSectionProps> = ({
             epochs: parseInt(e.target.value)
           })}
           slotProps={{
-            input: {
-              inputProps: { min: 1 }
-            }
+            htmlInput: { min: 1 }
           }}
         />
         <TextField
@@ -198,9 +192,7 @@ export const TrainingSection: FC<TrainingSectionProps> = ({
             batchSize: parseInt(e.target.value)
           })}
           slotProps={{
-            input: {
-              inputProps: { min: 1 }
-            }
+            htmlInput: { min: 1 }
           }}
         />
         <TextField
@@ -213,9 +205,7 @@ export const TrainingSection: FC<TrainingSectionProps> = ({
             validationSplit: parseFloat(e.target.value)
           })}
           slotProps={{
-            input: {
-              inputProps: { step: 0.1, min: 0, max: 0.5 }
-            }
+            htmlInput: { step: 0.1, min: 0, max: 0.5 }
           }}
         />
         

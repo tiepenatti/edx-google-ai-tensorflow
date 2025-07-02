@@ -115,9 +115,7 @@ export const TrainingSection = ({
           type="number"
           defaultValue={0.01}
           slotProps={{
-            input: {
-              inputProps: { step: 0.001, min: 0.001, max: 1 }
-            }
+              htmlInput: { step: 0.001, min: 0.001, max: 1 }
           }}
           onChange={(e) => onUpdateParams({ learningRate: parseFloat(e.target.value) })}
         />
@@ -140,9 +138,7 @@ export const TrainingSection = ({
           type="number"
           defaultValue={10}
           slotProps={{
-            input: {
-              inputProps: { min: 1, max: 1000 }
-            }
+            htmlInput: { min: 1, max: 1000 }
           }}
           onChange={(e) => onUpdateParams({ epochs: parseInt(e.target.value) })}
         />
@@ -153,9 +149,7 @@ export const TrainingSection = ({
           type="number"
           defaultValue={64}
           slotProps={{
-            input: {
-              inputProps: { min: 1, max: 256 }
-            }
+            htmlInput: { min: 1, max: 256 }
           }}
           onChange={(e) => onUpdateParams({ batchSize: parseInt(e.target.value) })}
         />
@@ -166,9 +160,7 @@ export const TrainingSection = ({
           type="number"
           defaultValue={0.15}
           slotProps={{
-            input: {
-              inputProps: { step: 0.1, min: 0, max: 0.5 }
-            }
+            htmlInput: { step: 0.1, min: 0, max: 0.5 }
           }}
           onChange={(e) => onUpdateParams({ validationSplit: parseFloat(e.target.value) })}
         />
