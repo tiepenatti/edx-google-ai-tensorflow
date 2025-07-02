@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.6.0] - 2025-04-30
+
+### Added
+- **CI/CD Pipeline**: Implemented a GitHub Actions workflow to automate the build and deployment to GitHub Pages.
+- **Docker Environment**: Added a `Dockerfile` to create a consistent and reproducible build environment, which helps in debugging CI/CD issues locally.
+- Enhanced copy on Fashion MNIST exercise and increased consistency with Handwritten Digit exercise
+
+### Fixed
+- Resolved a "JavaScript heap out of memory" error during the build process by increasing the memory limit for Node.js in the `build` script.
+
 ## [0.5.0] - 2025-04-29
 
 ### Added

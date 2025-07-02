@@ -99,6 +99,24 @@ To preview the production build locally:
 npm run preview
 ```
 
+### Build and Deployment
+
+This project uses a CI/CD pipeline powered by **GitHub Actions** to automate the build and deployment process. The pipeline is defined in `.github/workflows/githubpagesdeploy.yml` and includes the following steps:
+
+1.  **Checkout**: Checks out the repository.
+2.  **Setup Node.js**: Configures the Node.js environment.
+3.  **Install Dependencies**: Installs project dependencies using `npm install`.
+4.  **Build**: Builds the application for production using `npm run build`.
+5.  **Deploy**: Deploys the build to GitHub Pages.
+
+Additionally, a **Dockerfile** is included to create a consistent and reproducible build environment. This is particularly useful for debugging CI/CD issues locally.
+
+To build the Docker image:
+
+```bash
+docker build -t edx-google-ai-tensorflow .
+```
+
 ### Linting
 To run the linter:
 ```bash
