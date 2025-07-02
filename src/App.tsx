@@ -11,7 +11,7 @@ import './styles/global.scss';
 
 function App() {
   return (
-    <Router>
+    <Router basename="/edx-google-ai-tensorflow/">
       <Box 
         sx={{ 
           minHeight: '100vh', 
