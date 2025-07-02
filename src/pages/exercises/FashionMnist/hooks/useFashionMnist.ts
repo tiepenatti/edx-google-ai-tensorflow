@@ -206,7 +206,7 @@ export const useFashionMnist = () => {
         .sort((a, b) => b.probability - a.probability)
         .slice(0, 2);
     });
-  }, [model, imageTransform]);
+  }, [model, imageTransform, fashionLabels]);
 
   const showModelSummary = useCallback(() => {
     if (model) {
