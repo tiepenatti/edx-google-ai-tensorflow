@@ -15,6 +15,8 @@ export const InfoSection: React.FC = () => {
           the <Link href="https://storage.googleapis.com/jmstore/TensorFlowJS/EdX/TrainingData/mnist-fashion.js">
           Google course</Link> and 2D Convolutional layers.
           The dataset consists of 28x28 grayscale images of clothes and accessories.
+          They use more parameters and take longer to train. 
+          Expect something around 5 seconds per epoch using the default parameters on an average laptop.
         </Typography>
         <Typography>
           You can customize the model head architecture (which will be added after the convolutional layers) by 
@@ -25,7 +27,7 @@ export const InfoSection: React.FC = () => {
         <Typography>
           After training, you can evaluate the model by selecting random test images and seeing how well it
           classifies them. You can also google for fashion items pictures on web and drop the image url in 
-          the droppzone on the left side, ajust the image position, scale and rotation and see how well the model
+          the dropzone on the left side, adjust the image position, scale and rotation and see how well the model
           classifies them. The model will struggle with items that are significantly different from the training data.
           Images will have color inverted so black items with white background will be better recognized as 
           they are more similar to training images.
