@@ -11,7 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Enhanced Fashion MNIST exercise with Convolutional Neural Network:
   - Implemented CNN architecture with Conv2D and MaxPooling2D layers
   - Added drag-and-drop image URL support with image transformations
-  - Real-time 28x28 grayscale preview of model input
+  - Real-time 28x28 gray scale preview of model input
   - Interactive image controls (scale, rotation)
   - Side-by-side visualization of original and processed images
   - Improved model accuracy using convolutional layers
