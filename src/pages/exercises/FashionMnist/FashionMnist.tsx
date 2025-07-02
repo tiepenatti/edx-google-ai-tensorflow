@@ -1,12 +1,13 @@
-import React from 'react';
+import { FC } from 'react';
 import { Container, Typography } from '@mui/material';
 import { InfoSection, TrainingSection, EvaluationSection } from './components';
 import { useFashionMnist } from './hooks/useFashionMnist';
 import { ErrorBoundary } from '../../../components/ErrorBoundary';
 import type { TrainingParams } from '../../../types/TrainingParams';
 
-export const FashionMnist: React.FC = () => {
+export const FashionMnist: FC = () => {
   const {
+    model,
     isTraining,
     trainingHistory,
     trainingParams,
@@ -19,27 +20,11 @@ export const FashionMnist: React.FC = () => {
     cleanupModel,
     addHiddenLayer,
     removeHiddenLayer,
-    updateHiddenLayer
+    updateHiddenLayer,
   } = useFashionMnist();
 
-  const [predictions, setPredictions] = React.useState<Array<{ label: string; probability: number }> | null>(null);
-
-  const convertedParams: TrainingParams = {
-    ...trainingParams,
-    loss: trainingParams.lossFunction
-  };
-
   const handleTrainingParamsChange = (params: Partial<TrainingParams>) => {
-    setTrainingParams(prev => ({
-      ...prev,
-      ...params,
-      lossFunction: params.loss || prev.lossFunction
-    }));
-  };
-
-  const handleEvaluate = async (imageData: ImageData) => {
-    const result = await predictImage(imageData);
-    setPredictions(result);
+    setTrainingParams(prev => ({ ...prev, ...params }));
   };
 
   return (
@@ -54,28 +39,26 @@ export const FashionMnist: React.FC = () => {
 
       <ErrorBoundary>
         <TrainingSection
+          model={model}
           isTraining={isTraining}
           trainingHistory={trainingHistory}
-          trainingParams={convertedParams}
-          layers={hiddenLayers}
-          onTrainingParamsChange={handleTrainingParamsChange}
-          onAddLayer={addHiddenLayer}
-          onRemoveLayer={removeHiddenLayer}
-          onLayerUnitsChange={updateHiddenLayer}
-          onStartTraining={startTraining}
-          onStopTraining={stopTraining}
-          onShowDetails={showModelSummary}
+          trainingParams={trainingParams}
+          hiddenLayers={hiddenLayers}
+          setTrainingParams={handleTrainingParamsChange}
+          addHiddenLayer={addHiddenLayer}
+          removeHiddenLayer={removeHiddenLayer}
+          updateHiddenLayer={updateHiddenLayer}
+          startTraining={startTraining}
+          stopTraining={stopTraining}
+          showModelSummary={showModelSummary}
         />
       </ErrorBoundary>
 
       <ErrorBoundary>
         <EvaluationSection
-          prediction={predictions}
-          onEvaluate={handleEvaluate}
-          onCleanup={() => {
-            cleanupModel();
-            setPredictions(null);
-          }}
+          model={model}
+          predictImage={predictImage}
+          cleanupModel={cleanupModel}
         />
       </ErrorBoundary>
     </Container>

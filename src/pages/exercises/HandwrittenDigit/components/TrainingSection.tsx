@@ -4,7 +4,6 @@ import { Paper, Typography, Box, Button, TextField, Select, MenuItem, FormContro
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 import type { TrainingHistoryPoint } from '../../../../types/TrainingHistoryPoint';
-import { MnistTrainingParams } from '../hooks/useHandwrittenDigit';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -19,6 +18,7 @@ import { Line } from 'react-chartjs-2';
 import styles from './TrainingSection.module.scss';
 import { Optimizer } from '../../../../types/Optimizer';
 import { LossFunction } from '../../../../types/LossFunction';
+import { TrainingParams } from '../../../../types/TrainingParams';
 
 ChartJS.register(
   CategoryScale,
@@ -34,8 +34,8 @@ interface TrainingSectionProps {
   model: LayersModel | null;
   trainingHistory: TrainingHistoryPoint[];
   isTraining: boolean;
-  trainingParams: MnistTrainingParams;
-  setTrainingParams: (params: MnistTrainingParams) => void;
+  trainingParams: TrainingParams;
+  setTrainingParams: (params: TrainingParams) => void;
   startTraining: () => void;
   stopTraining: () => void;
   showModelSummary: () => void;
@@ -239,10 +239,10 @@ export const TrainingSection: FC<TrainingSectionProps> = ({
           <InputLabel>Loss Function</InputLabel>
           <Select
             label="Loss Function"
-            value={trainingParams.lossFunction}
+            value={trainingParams.loss}
             onChange={(e) => setTrainingParams({
               ...trainingParams,
-              lossFunction: e.target.value as LossFunction
+              loss: e.target.value as LossFunction
             })}
           >
             <MenuItem value="categoricalCrossentropy">Categorical Crossentropy</MenuItem>

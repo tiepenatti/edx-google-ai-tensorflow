@@ -2,21 +2,12 @@ import { useState, useCallback } from 'react';
 import * as tf from '@tensorflow/tfjs';
 import * as tfvis from '@tensorflow/tfjs-vis';
 import type { TrainingHistoryPoint } from '../../../../types/TrainingHistoryPoint';
-import { TRAINING_DATA } from '../../../../data/mnist-data.ts';
 import { Optimizer } from '../../../../types/Optimizer';
 import { LossFunction } from '../../../../types/LossFunction';
+import { TrainingParams } from '../../../../types/TrainingParams.ts';
 
 interface HiddenLayer {
   units: number;
-}
-
-export interface MnistTrainingParams {
-  learningRate: number;
-  optimizer: Optimizer;
-  lossFunction: LossFunction;
-  validationSplit: number;
-  batchSize: number;
-  epochs: number;
 }
 
 export const useHandwrittenDigit = () => {
@@ -24,10 +15,10 @@ export const useHandwrittenDigit = () => {
   const [trainingHistory, setTrainingHistory] = useState<TrainingHistoryPoint[]>([]);
   const [isTraining, setIsTraining] = useState(false);
   const [hiddenLayers, setHiddenLayers] = useState<HiddenLayer[]>([{ units: 32 }]);
-  const [trainingParams, setTrainingParams] = useState<MnistTrainingParams>({
+  const [trainingParams, setTrainingParams] = useState<TrainingParams>({
     learningRate: 0.01,
     optimizer: Optimizer.ADAM,
-    lossFunction: LossFunction.CCE,
+    loss: LossFunction.CCE,
     validationSplit: 0.2,
     batchSize: 64,
     epochs: 10
@@ -69,6 +60,7 @@ export const useHandwrittenDigit = () => {
     setModel(newModel);
     
     try {
+      const { TRAINING_DATA } = await import('../../../../data/mnist-data.ts');
       const INPUTS = TRAINING_DATA.inputs as number[][];
       const OUTPUTS = TRAINING_DATA.outputs as number[];
       tf.util.shuffleCombo(INPUTS, OUTPUTS);
@@ -92,7 +84,7 @@ export const useHandwrittenDigit = () => {
 
       newModel.compile({
         optimizer,
-        loss: trainingParams.lossFunction,
+        loss: trainingParams.loss,
         metrics: ['accuracy']
       });
 

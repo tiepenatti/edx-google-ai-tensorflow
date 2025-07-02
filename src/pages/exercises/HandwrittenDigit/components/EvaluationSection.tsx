@@ -2,7 +2,6 @@ import { FC, useRef, useEffect, useState } from 'react';
 import { Paper, Typography, Box, Button, Stack, Grid } from '@mui/material';
 import { LayersModel } from '@tensorflow/tfjs';
 import * as tf from '@tensorflow/tfjs-core';
-import { TRAINING_DATA } from '../../../../data/mnist-data';
 import styles from './EvaluationSection.module.scss';
 
 interface EvaluationSectionProps {
@@ -196,6 +195,7 @@ export const EvaluationSection: FC<EvaluationSectionProps> = ({
   };
 
   const pickRandomSample = async () => {
+    const { TRAINING_DATA } = await import('../../../../data/mnist-data');
     const randomIndex = Math.floor(Math.random() * TRAINING_DATA.inputs.length);
     const sampleData = TRAINING_DATA.inputs[randomIndex];
     
