@@ -4,7 +4,6 @@ import { Paper, Typography, Box, Button, TextField, Select, MenuItem, FormContro
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 import type { TrainingHistoryPoint } from '../../../../types/TrainingHistoryPoint';
-import { MnistTrainingParams } from '../hooks/useHandwrittenDigit';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -19,6 +18,7 @@ import { Line } from 'react-chartjs-2';
 import styles from './TrainingSection.module.scss';
 import { Optimizer } from '../../../../types/Optimizer';
 import { LossFunction } from '../../../../types/LossFunction';
+import { TrainingParams } from '../../../../types/TrainingParams';
 
 ChartJS.register(
   CategoryScale,
@@ -34,8 +34,8 @@ interface TrainingSectionProps {
   model: LayersModel | null;
   trainingHistory: TrainingHistoryPoint[];
   isTraining: boolean;
-  trainingParams: MnistTrainingParams;
-  setTrainingParams: (params: MnistTrainingParams) => void;
+  trainingParams: TrainingParams;
+  setTrainingParams: (params: TrainingParams) => void;
   startTraining: () => void;
   stopTraining: () => void;
   showModelSummary: () => void;
@@ -98,10 +98,10 @@ export const TrainingSection: FC<TrainingSectionProps> = ({
     },
     plugins: {
       title: {
-        display: false  // Removed title since we have it in Typography
+        display: false
       },
       legend: {
-        position: 'top' as const  // Moved to top to save vertical space
+        position: 'top' as const
       }
     },
   };
@@ -126,9 +126,7 @@ export const TrainingSection: FC<TrainingSectionProps> = ({
                 value={layer.units}
                 onChange={(e) => updateHiddenLayer(index, parseInt(e.target.value))}
                 slotProps={{
-                  input: {
-                    inputProps: { min: 1 }
-                  }
+                  htmlInput: { min: 1 }
                 }}
               />
             </Box>
@@ -168,9 +166,7 @@ export const TrainingSection: FC<TrainingSectionProps> = ({
             learningRate: parseFloat(e.target.value)
           })}
           slotProps={{
-            input: {
-              inputProps: { step: 0.001, min: 0.001, max: 1 }
-            }
+            htmlInput: { step: 0.001, min: 0.001, max: 1 }
           }}
         />
         <TextField
@@ -183,9 +179,7 @@ export const TrainingSection: FC<TrainingSectionProps> = ({
             epochs: parseInt(e.target.value)
           })}
           slotProps={{
-            input: {
-              inputProps: { min: 1 }
-            }
+            htmlInput: { min: 1 }
           }}
         />
         <TextField
@@ -198,9 +192,7 @@ export const TrainingSection: FC<TrainingSectionProps> = ({
             batchSize: parseInt(e.target.value)
           })}
           slotProps={{
-            input: {
-              inputProps: { min: 1 }
-            }
+            htmlInput: { min: 1 }
           }}
         />
         <TextField
@@ -213,9 +205,7 @@ export const TrainingSection: FC<TrainingSectionProps> = ({
             validationSplit: parseFloat(e.target.value)
           })}
           slotProps={{
-            input: {
-              inputProps: { step: 0.1, min: 0, max: 0.5 }
-            }
+            htmlInput: { step: 0.1, min: 0, max: 0.5 }
           }}
         />
         
@@ -239,10 +229,10 @@ export const TrainingSection: FC<TrainingSectionProps> = ({
           <InputLabel>Loss Function</InputLabel>
           <Select
             label="Loss Function"
-            value={trainingParams.lossFunction}
+            value={trainingParams.loss}
             onChange={(e) => setTrainingParams({
               ...trainingParams,
-              lossFunction: e.target.value as LossFunction
+              loss: e.target.value as LossFunction
             })}
           >
             <MenuItem value="categoricalCrossentropy">Categorical Crossentropy</MenuItem>

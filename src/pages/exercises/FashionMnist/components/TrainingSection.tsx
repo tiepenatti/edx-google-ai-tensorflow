@@ -1,3 +1,4 @@
+import { LayersModel } from '@tensorflow/tfjs';
 import React from 'react';
 import { Line } from 'react-chartjs-2';
 import { TextField, Select, MenuItem, FormControl, InputLabel, Paper, Typography, Box, Stack, Grid } from '@mui/material';
@@ -7,33 +8,38 @@ import { LossFunction } from '../../../../types/LossFunction';
 import { Optimizer } from '../../../../types/Optimizer';
 import { TrainingHistoryPoint } from '../../../../types/TrainingHistoryPoint';
 import styles from './TrainingSection.module.scss';
+import AddIcon from '@mui/icons-material/Add';
+import RemoveIcon from '@mui/icons-material/Remove';
 
 interface TrainingSectionProps {
+  model: LayersModel | null;
   isTraining: boolean;
   trainingHistory: Array<TrainingHistoryPoint>;
   trainingParams: TrainingParams;
-  layers: Array<{ units: number }>;
-  onTrainingParamsChange: (params: Partial<TrainingParams>) => void;
-  onAddLayer: () => void;
-  onRemoveLayer: () => void;
-  onLayerUnitsChange: (index: number, units: number) => void;
-  onStartTraining: () => void;
-  onStopTraining: () => void;
-  onShowDetails: () => void;
+  hiddenLayers: Array<{ units: number }>;
+
+  setTrainingParams: (params: TrainingParams) => void;
+  addHiddenLayer: () => void;
+  removeHiddenLayer: () => void;
+  updateHiddenLayer: (index: number, units: number) => void;
+  startTraining: () => void;
+  stopTraining: () => void;
+  showModelSummary: () => void;
 }
 
 export const TrainingSection: React.FC<TrainingSectionProps> = ({
+  model,
   isTraining,
   trainingHistory,
   trainingParams,
-  layers,
-  onTrainingParamsChange,
-  onAddLayer,
-  onRemoveLayer,
-  onLayerUnitsChange,
-  onStartTraining,
-  onStopTraining,
-  onShowDetails,
+  hiddenLayers,
+  setTrainingParams,
+  addHiddenLayer,
+  removeHiddenLayer,
+  updateHiddenLayer,
+  startTraining,
+  stopTraining,
+  showModelSummary,
 }) => {
   const chartData = {
     labels: trainingHistory.map((_, i) => i + 1),
@@ -84,20 +90,31 @@ export const TrainingSection: React.FC<TrainingSectionProps> = ({
           Model Architecture
         </Typography>
         <Stack spacing={2}>
-          {layers.map((layer, index) => (
+          {hiddenLayers.map((layer, index) => (
             <TextField
               key={index}
               fullWidth
               label={`Hidden Layer ${index + 1} Units`}
               type="number"
               value={layer.units}
-              onChange={e => onLayerUnitsChange(index, parseInt(e.target.value, 10))}
-              inputProps={{ min: 1 }}
+              onChange={e => updateHiddenLayer(index, parseInt(e.target.value, 10))}
+              slotProps={{ htmlInput: { min: 1 } }}
             />
           ))}
           <Box className={styles['training-section__layer-buttons']}>
-            <Button onClick={onAddLayer}>Add Layer</Button>
-            <Button onClick={onRemoveLayer} disabled={layers.length <= 1}>Remove Layer</Button>
+            <Button 
+              variant="outlined" 
+              startIcon={<AddIcon />}
+              onClick={addHiddenLayer}
+            >
+              Add Layer</Button>
+            <Button 
+              variant="outlined" 
+              startIcon={<RemoveIcon />}
+              onClick={removeHiddenLayer} 
+              disabled={hiddenLayers.length <= 1}
+            >
+              Remove Layer</Button>
           </Box>
         </Stack>
       </Box>
@@ -113,8 +130,8 @@ export const TrainingSection: React.FC<TrainingSectionProps> = ({
               label="Learning Rate"
               type="number"
               value={trainingParams.learningRate}
-              onChange={e => onTrainingParamsChange({ learningRate: parseFloat(e.target.value) })}
-              inputProps={{ step: 0.001, min: 0 }}
+              onChange={e => setTrainingParams({ ...trainingParams, learningRate: parseFloat(e.target.value) })}
+              slotProps={{ htmlInput: { step: 0.001, min: 0 } }}
             />
           </Grid>
           <Grid size={{ xs: 12, sm: 6 }}>
@@ -123,7 +140,7 @@ export const TrainingSection: React.FC<TrainingSectionProps> = ({
               <Select
                 value={trainingParams.optimizer}
                 label="Optimizer"
-                onChange={e => onTrainingParamsChange({ optimizer: e.target.value as Optimizer })}
+                onChange={e => setTrainingParams({ ...trainingParams, optimizer: e.target.value as Optimizer })}
               >
                 {Object.values(Optimizer).map(opt => (
                   <MenuItem key={opt} value={opt}>{opt}</MenuItem>
@@ -137,7 +154,7 @@ export const TrainingSection: React.FC<TrainingSectionProps> = ({
               <Select
                 value={trainingParams.loss}
                 label="Loss Function"
-                onChange={e => onTrainingParamsChange({ loss: e.target.value as LossFunction })}
+                onChange={e => setTrainingParams({ ...trainingParams, loss: e.target.value as LossFunction })}
               >
                 {Object.values(LossFunction).map(loss => (
                   <MenuItem key={loss} value={loss}>{loss}</MenuItem>
@@ -151,7 +168,7 @@ export const TrainingSection: React.FC<TrainingSectionProps> = ({
               label="Epochs"
               type="number"
               value={trainingParams.epochs}
-              onChange={e => onTrainingParamsChange({ epochs: parseInt(e.target.value, 10) })}
+              onChange={e => setTrainingParams({ ...trainingParams, epochs: parseInt(e.target.value, 10) })}
               slotProps={{ htmlInput: { min: 1 } }}
             />
           </Grid>
@@ -161,7 +178,7 @@ export const TrainingSection: React.FC<TrainingSectionProps> = ({
               label="Batch Size"
               type="number"
               value={trainingParams.batchSize}
-              onChange={e => onTrainingParamsChange({ batchSize: parseInt(e.target.value, 10) })}
+              onChange={e => setTrainingParams({ ...trainingParams, batchSize: parseInt(e.target.value, 10) })}
               slotProps={{ htmlInput: { min: 1 } }}
             />
           </Grid>
@@ -171,7 +188,7 @@ export const TrainingSection: React.FC<TrainingSectionProps> = ({
               label="Validation Split"
               type="number"
               value={trainingParams.validationSplit}
-              onChange={e => onTrainingParamsChange({ validationSplit: parseFloat(e.target.value) })}
+              onChange={e => setTrainingParams({ ...trainingParams, validationSplit: parseFloat(e.target.value) })}
               slotProps={{ htmlInput: { step: 0.1, min: 0, max: 1 } }}
             />
           </Grid>
@@ -179,13 +196,14 @@ export const TrainingSection: React.FC<TrainingSectionProps> = ({
       </Box>
 
       <Box className={styles['training-section__button-group']}>
-        <Button onClick={onStartTraining} disabled={isTraining}>
+        <Button onClick={startTraining} disabled={isTraining}>
           Start Training
         </Button>
-        <Button onClick={onStopTraining} disabled={!isTraining}>
+        <Button onClick={stopTraining} disabled={!isTraining} variant="outlined" color="secondary">
           Stop Training
         </Button>
-        <Button onClick={onShowDetails}>Show Model Details</Button>
+        <Button onClick={showModelSummary} disabled={!model} variant="outlined" >
+          Show Model Details</Button>
       </Box>
 
       {trainingHistory.length > 0 && (
@@ -199,6 +217,7 @@ export const TrainingSection: React.FC<TrainingSectionProps> = ({
               options={{
                 responsive: true,
                 maintainAspectRatio: false,
+                animation: false,
                 scales: {
                   y: {
                     type: 'linear',

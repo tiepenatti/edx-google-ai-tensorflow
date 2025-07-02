@@ -43,9 +43,7 @@ export const EvaluationSection = ({
           value={size}
           onChange={(e) => setSize(parseInt(e.target.value))}
           slotProps={{
-            input: {
-              inputProps: { step: 50, min: 500, max: 5000 }
-            }
+            htmlInput: { step: 50, min: 500, max: 5000 }
           }}
         />
         <TextField
@@ -55,9 +53,7 @@ export const EvaluationSection = ({
           value={bedrooms}
           onChange={(e) => setBedrooms(parseInt(e.target.value))}
           slotProps={{
-            input: {
-              inputProps: { min: 1, max: 8 }
-            }
+            htmlInput: { min: 1, max: 8 }
           }}
         />
       </Box>

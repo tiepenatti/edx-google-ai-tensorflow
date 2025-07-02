@@ -1,19 +1,19 @@
 import React, { useRef, useState, useCallback } from 'react';
 import { Paper, Typography, Box, Stack, Slider } from '@mui/material';
 import { Button } from '../../../../components/Button/Button';
-import { TRAINING_DATA } from '../../../../data/fashion-mnist';
 import styles from './EvaluationSection.module.scss';
+import { LayersModel } from '@tensorflow/tfjs';
 
 interface EvaluationSectionProps {
-  prediction: Array<{ label: string; probability: number }> | null;
-  onEvaluate: (imageData: ImageData) => void;
-  onCleanup: () => void;
+  model: LayersModel | null;
+  predictImage: (imageData: ImageData) => Promise<{ label: string; probability: number }[] | null>;
+  cleanupModel: () => void;
 }
 
 export const EvaluationSection: React.FC<EvaluationSectionProps> = ({
-  prediction,
-  onEvaluate,
-  onCleanup,
+  model,
+  predictImage,
+  cleanupModel,
 }) => {
   const dropzoneCanvasRef = useRef<HTMLCanvasElement>(null);
   const previewCanvasRef = useRef<HTMLCanvasElement>(null);
@@ -23,6 +23,7 @@ export const EvaluationSection: React.FC<EvaluationSectionProps> = ({
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [isDragging, setIsDragging] = useState(false);
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
+  const [prediction, setPrediction] = useState<Array<{ label: string; probability: number }> | null>(null);
 
   const drawPreviewGrid = useCallback((ctx: CanvasRenderingContext2D) => {
     ctx.strokeStyle = '#333';
@@ -150,7 +151,7 @@ export const EvaluationSection: React.FC<EvaluationSectionProps> = ({
     setIsDragging(false);
   };
 
-  const handleEvaluate = () => {
+  const handleEvaluate = async () => {
     if (!imageUrl) return;
     
     const previewCanvas = previewCanvasRef.current;
@@ -158,16 +159,18 @@ export const EvaluationSection: React.FC<EvaluationSectionProps> = ({
     
     const imageData = previewCanvas.getContext('2d')?.getImageData(0, 0, previewCanvas.width, previewCanvas.height);
     if (imageData) {
-      onEvaluate(imageData);
+      const result = await predictImage(imageData);
+      setPrediction(result);
     }
   };
 
-  const handleRandomImage = () => {
+  const handleRandomImage = async () => {
     setImageUrl(null);
     setScale(1);
     setRotation(0);
     setPosition({ x: 0, y: 0 });
     
+    const { TRAINING_DATA } = await import('../../../../data/fashion-mnist');
     const index = Math.floor(Math.random() * TRAINING_DATA.inputs.length);
     const imageData = TRAINING_DATA.inputs[index];
     const previewCanvas = previewCanvasRef.current;
@@ -190,7 +193,13 @@ export const EvaluationSection: React.FC<EvaluationSectionProps> = ({
 
     drawPreviewGrid(ctx);
     const finalImageData = ctx.getImageData(0, 0, previewCanvas.width, previewCanvas.height);
-    onEvaluate(finalImageData);
+    const result = await predictImage(finalImageData);
+    setPrediction(result);
+  };
+
+  const handleCleanup = () => {
+    cleanupModel();
+    setPrediction(null);
   };
 
   return (
@@ -259,7 +268,7 @@ export const EvaluationSection: React.FC<EvaluationSectionProps> = ({
               <Button
                 variant="outlined"
                 color="secondary" 
-                onClick={onCleanup}
+                onClick={handleCleanup}
                 disabled={!model}
               >
                 Cleanup Model
