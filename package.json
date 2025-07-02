@@ -44,6 +44,10 @@
     "typescript": "~5.7.2",
     "typescript-eslint": "^8.26.1",
     "vite": "^6.3.1"
+  },
+  "overrides": {
+    "d3-color": "3.1.0",
+    "vega": "5.25.0",
+    "node-fetch": "2.6.7"
   }
-  
 }
