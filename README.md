@@ -1,5 +1,5 @@
 # edX Google AI TensorFlow.js
-This is a simple project demonstrating machine learning exercises from the edX course by Google on TensorFlow.js.
+This is a simple project demonstrating machine learning exercises from the edX course by Google on TensorFlow.js. You can demo it [here](https://tiepenatti.github.io/edx-google-ai-tensorflow/).
 
 ## Exercises
 
