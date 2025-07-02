@@ -4,7 +4,7 @@ import CameraAltIcon from '@mui/icons-material/CameraAlt';
 import HomeIcon from '@mui/icons-material/Home';
 import CreateIcon from '@mui/icons-material/Create';
 import CheckroomIcon from '@mui/icons-material/Checkroom';
-import { Exercise } from '../types/Exercise';
+import { Exercise } from '../types/Exercise.ts';
 import './HomePage.scss';
 
 const exercises: Omit<Exercise, 'id' | 'difficulty'>[] = [
